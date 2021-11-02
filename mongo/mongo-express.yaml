@@ -40,7 +40,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongodb-express-service
+  name: mahesh-express-service
 spec:
   selector:
     app: mongodb-express
