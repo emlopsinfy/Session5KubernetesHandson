@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+  labels:
+    app: mongodb #this is to talk to this deployment, this is label for deployment, this can be anything.
+spec:
+  selector:
+    matchLabels:
+      app: mongodb #if we match this, we will be able to reach this, this name and below label name must be same
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongodb #this must match with above name
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo
+        ports:
+        - containerPort: 27017
+          #Connect to MongoDB from another Docker container
+          #The MongoDB server in the image listens on the standard MongoDB port, 27017, 
+          #so connecting via Docker networks will be the same as connecting to a remote mongod. 
+          #The following example starts another MongoDB container instance and runs the 
+          #mongo command line client against the original MongoDB container from the example above, 
+          #allowing you to execute MongoDB statements against your database instance:        
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: mongo-root-username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: mongo-root-password   
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+spec:
+  selector:
+    app: mongodb
+  ports:
+  - protocol: TCP
+    port: 27017 #this is where service listens, service port
+    targetPort: 27017 #this is your db specfic port, it is taken from hub.
+    #so we are listening and redirecting to same port, listening can be other port too.           
