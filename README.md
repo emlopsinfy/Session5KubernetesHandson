@@ -46,6 +46,10 @@ See path in Env Variables, make sure C:\Program Files\Kubernetes\Minikube is abo
 This is because we are asking to kubectl from Kubernetes Minikube not from Docker.
 
 If still error persists, 
+https://stackoverflow.com/questions/47603689/minikube-not-starting-on-windows-10
+PS C:\WINDOWS\system32> minikube delete 
+ PS C:\WINDOWS\system32> kubectl config use-context minikube
+ PS C:\WINDOWS\system32> minikube start --vm-driver=docker
 
 Delete Docker folder from C:\Users\Admin\AppData\Local and C:\Users\Admin\AppData\Roaming
 
